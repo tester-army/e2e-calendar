@@ -26,12 +26,10 @@ export function BookingCard() {
     setStart("");
     setSlots("loading");
 
-    // A later pick wins over an answer still on its way.
     slotsRequest.current?.abort();
     const request = new AbortController();
     slotsRequest.current = request;
 
-    // UTC instants come back, and this browser formats them in its own zone and locale.
     const query = new URLSearchParams({
       date: format(picked, "yyyy-MM-dd"),
       timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
@@ -114,7 +112,7 @@ export function BookingCard() {
   );
 }
 
-// Only rendered in the open popover, so "today" is always the browser's today, never the server's.
+// Only renders in the open popover, so "today" is the browser's, never the server's.
 function DayCalendar({ selected, onSelect }: { selected?: Date; onSelect: (day: Date) => void }) {
   const today = new Date();
 

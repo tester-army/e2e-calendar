@@ -2,7 +2,7 @@
 
 import { useSyncExternalStore, type ComponentProps } from "react";
 
-// The server can't know the visitor's time zone or locale, so it renders nothing here and the browser fills it in.
+// The server can't know the visitor's zone or locale, so only the browser renders these.
 const subscribe = () => () => {};
 
 export function useVisitorTimeZone() {
@@ -17,7 +17,6 @@ export function VisitorTimeZone(props: ComponentProps<"span">) {
   return <span {...props}>{useVisitorTimeZone() ?? "your time zone"}</span>;
 }
 
-/** An instant in the visitor's time zone and locale. */
 export function LocalTime({
   iso,
   format,

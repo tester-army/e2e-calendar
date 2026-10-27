@@ -25,7 +25,7 @@ async function Booking({ searchParams }: Pick<PageProps<"/booked">, "searchParam
   const { start } = await searchParams;
   const instant = new Date(typeof start === "string" ? start : NaN);
 
-  // Whether the slot is still ahead depends on the current time, so check per request.
+  // isFreeSlot reads the current time, which Next allows only per request.
   await connection();
   if (Number.isNaN(+instant) || !isFreeSlot(instant)) {
     return (

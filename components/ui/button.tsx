@@ -3,7 +3,7 @@ import { cn } from "cn";
 import { Slot } from "radix-ui";
 import type { ComponentProps } from "react";
 
-// shadcn/ui's Button, restyled with the e2e tokens and trimmed to what the Calendar uses.
+// shadcn/ui's Button, cut down to what the Calendar uses.
 const buttonVariants = cva(
   [
     "inline-flex shrink-0 items-center justify-center gap-2 type-chip whitespace-nowrap transition-colors outline-none",

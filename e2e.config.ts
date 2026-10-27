@@ -23,7 +23,7 @@ export default {
         "The page books a 30-minute intro call: pick a day with the Date picker, a time from the Time list, then Book. Times are listed in the visitor's own time zone and clock format. 'Next Tuesday' means the Tuesday of next week, and weeks start on Monday.",
     },
   },
-  // Every test runs once per target: as a visitor in London and as one in New York.
+  // Every test runs once per target.
   targets: [
     { name: "london", engine: web({ timezoneId: "Europe/London", locale: "en-GB" }), app },
     { name: "new-york", engine: web({ timezoneId: "America/New_York", locale: "en-US" }), app },

@@ -1,7 +1,6 @@
 import clsx from "clsx";
 import type { ReactNode } from "react";
 
-// The landing configurator's input, for the Date and Time triggers.
 export const FIELD = clsx(
   "flex h-11 w-full items-center justify-between gap-2 px-4 whitespace-nowrap",
   "border border-e2e-field-stroke bg-e2e-field-fill type-field text-e2e-text-primary",

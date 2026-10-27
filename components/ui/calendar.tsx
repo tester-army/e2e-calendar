@@ -7,7 +7,7 @@ import { DayPicker, getDefaultClassNames, type DayButton } from "react-day-picke
 
 import { Button, buttonVariants } from "@/components/ui/button";
 
-// shadcn/ui's Calendar, restyled with the e2e tokens and trimmed to picking single days.
+// shadcn/ui's Calendar, cut down to single days.
 function Calendar({
   className,
   classNames,
@@ -69,7 +69,6 @@ function Calendar({
 function CalendarDayButton({ className, day, modifiers, ...props }: ComponentProps<typeof DayButton>) {
   const defaultClassNames = getDefaultClassNames();
 
-  // DayPicker moves focus with the arrow keys; the button follows it.
   const ref = useRef<HTMLButtonElement>(null);
   useEffect(() => {
     if (modifiers.focused) ref.current?.focus();

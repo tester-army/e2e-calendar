@@ -7,7 +7,7 @@ import type { ComponentProps } from "react";
 
 import { FIELD } from "@/components/ui/field";
 
-// shadcn/ui's Select, restyled with the e2e tokens and trimmed to what the booking card uses.
+// shadcn/ui's Select, cut down to what the booking card uses.
 function Select(props: ComponentProps<typeof SelectPrimitive.Root>) {
   return <SelectPrimitive.Root data-slot="select" {...props} />;
 }
