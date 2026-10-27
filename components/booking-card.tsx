@@ -1,8 +1,10 @@
 "use client";
 
+import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
-import { useState, useSyncExternalStore } from "react";
+import { useRef, useState } from "react";
 
+import { VisitorTimeZone } from "@/components/local-time";
 import { Calendar } from "@/components/ui/calendar";
 import { FIELD, Field } from "@/components/ui/field";
 import { LightButton } from "@/components/ui/light-button";
@@ -14,10 +16,49 @@ const dayFormat = { weekday: "long", day: "numeric", month: "long" } as const;
 export function BookingCard() {
   const [day, setDay] = useState<Date>();
   const [pickingDay, setPickingDay] = useState(false);
+  const [slots, setSlots] = useState<string[] | "loading" | "failed">([]);
   const [start, setStart] = useState("");
-  const timeZone = useVisitorTimeZone();
-  // Free slots arrive with GET /api/slots in step 3.
-  const slots: { start: string; label: string }[] = [];
+  const slotsRequest = useRef<AbortController>(null);
+
+  async function pickDay(picked: Date) {
+    setDay(picked);
+    setPickingDay(false);
+    setStart("");
+    setSlots("loading");
+
+    // A later pick wins over an answer still on its way.
+    slotsRequest.current?.abort();
+    const request = new AbortController();
+    slotsRequest.current = request;
+
+    // UTC instants come back, and this browser formats them in its own zone and locale.
+    const query = new URLSearchParams({
+      date: format(picked, "yyyy-MM-dd"),
+      timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    });
+    try {
+      const response = await fetch(`/api/slots?${query}`, { signal: request.signal });
+      if (!response.ok) throw new Error(`GET /api/slots answered ${response.status}`);
+      const body: { slots: string[] } = await response.json();
+      setSlots(body.slots);
+    } catch (error) {
+      if (!request.signal.aborted) {
+        console.error(error);
+        setSlots("failed");
+      }
+    }
+  }
+
+  const options = Array.isArray(slots) ? slots : [];
+  const placeholder = !day
+    ? "Pick a day first"
+    : slots === "loading"
+      ? "Loading times…"
+      : slots === "failed"
+        ? "Couldn't load the times"
+        : options.length === 0
+          ? "No free times"
+          : "Pick a time";
 
   return (
     <section
@@ -41,27 +82,20 @@ export function BookingCard() {
               <CalendarIcon className="size-4 text-e2e-text-faint" />
             </PopoverTrigger>
             <PopoverContent align="start" className="w-auto p-0">
-              <DayCalendar
-                selected={day}
-                onSelect={(picked) => {
-                  setDay(picked);
-                  setStart("");
-                  setPickingDay(false);
-                }}
-              />
+              <DayCalendar selected={day} onSelect={pickDay} />
             </PopoverContent>
           </Popover>
         </Field>
 
         <Field label="Time" htmlFor="time">
-          <Select name="start" required value={start} onValueChange={setStart} disabled={slots.length === 0}>
+          <Select name="start" required value={start} onValueChange={setStart} disabled={options.length === 0}>
             <SelectTrigger id="time">
-              <SelectValue placeholder={day ? "No free times" : "Pick a day first"} />
+              <SelectValue placeholder={placeholder} />
             </SelectTrigger>
             <SelectContent className="max-h-72">
-              {slots.map((slot) => (
-                <SelectItem key={slot.start} value={slot.start}>
-                  {slot.label}
+              {options.map((slot) => (
+                <SelectItem key={slot} value={slot}>
+                  {new Date(slot).toLocaleTimeString(undefined, { timeStyle: "short" })}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -69,7 +103,7 @@ export function BookingCard() {
         </Field>
 
         <p className="type-caption text-e2e-text-faint">
-          Times in <span data-testid="time-zone">{timeZone ?? "your time zone"}</span>
+          Times in <VisitorTimeZone data-testid="time-zone" />
         </p>
 
         <LightButton type="submit" disabled={!start}>
@@ -95,16 +129,5 @@ function DayCalendar({ selected, onSelect }: { selected?: Date; onSelect: (day: 
       disabled={[{ before: today }, { dayOfWeek: [0, 6] }]}
       autoFocus
     />
-  );
-}
-
-const subscribe = () => () => {};
-
-// The server can't know the visitor's time zone, so it renders null and the browser fills it in.
-function useVisitorTimeZone() {
-  return useSyncExternalStore(
-    subscribe,
-    () => Intl.DateTimeFormat().resolvedOptions().timeZone,
-    () => null,
   );
 }
