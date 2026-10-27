@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { connection } from "next/server";
-import { Suspense, type ReactNode } from "react";
+import { Suspense, useId, type ReactNode } from "react";
 
 import { LocalTime, VisitorTimeZone } from "@/components/local-time";
 import { OUTLINE_BUTTON } from "@/components/ui/outline-button";
@@ -10,7 +10,7 @@ export default function BookedPage({ searchParams }: PageProps<"/booked">) {
   return (
     <main className="flex flex-1 flex-col justify-center px-6 py-10 sm:px-10">
       <div className="mx-auto flex w-full max-w-105 flex-col gap-4">
-        <Suspense fallback={<BookingPanel status="Checking…" />}>
+        <Suspense fallback={<BookingPanel status="Checking…" pending />}>
           <Booking searchParams={searchParams} />
         </Suspense>
         <Link href="/" className={OUTLINE_BUTTON}>
@@ -51,16 +51,20 @@ async function Booking({ searchParams }: Pick<PageProps<"/booked">, "searchParam
   );
 }
 
-function BookingPanel({ status, children }: { status: string; children?: ReactNode }) {
+// The streamed result sits hidden beside the fallback for a moment, so only the result has the test id.
+function BookingPanel({ status, pending, children }: { status: string; pending?: boolean; children?: ReactNode }) {
+  const headingId = useId();
+
   return (
     <section
-      aria-labelledby="booking-heading"
+      aria-labelledby={headingId}
+      aria-busy={pending}
       className="flex flex-col gap-2 border border-e2e-hairline-strong bg-e2e-panel p-5"
     >
-      <h1 id="booking-heading" className="type-label-xs text-e2e-text-faint">
+      <h1 id={headingId} className="type-label-xs text-e2e-text-faint">
         Intro call
       </h1>
-      <p data-testid="booking-status" className="type-h3-display text-e2e-text-bright">
+      <p data-testid={pending ? undefined : "booking-status"} className="type-h3-display text-e2e-text-bright">
         {status}
       </p>
       {children && <p className="flex flex-col type-body-s text-e2e-text-soft">{children}</p>}
