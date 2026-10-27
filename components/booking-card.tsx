@@ -124,6 +124,7 @@ function DayCalendar({ selected, onSelect }: { selected?: Date; onSelect: (day: 
       onSelect={onSelect}
       defaultMonth={selected ?? today}
       startMonth={today}
+      showOutsideDays={false}
       disabled={[{ before: today }, { dayOfWeek: [0, 6] }]}
       autoFocus
     />
