@@ -45,7 +45,7 @@ export function at(day: TZDate, time: string, timeZone = day.timeZone): Date {
   return new Date(+new TZDate(day.getFullYear(), day.getMonth(), day.getDate(), hour, minute, timeZone));
 }
 
-export function formatDay(day: TZDate, visitor: Visitor): string {
+export function formatPickedDay(day: TZDate, visitor: Visitor): string {
   return day.toLocaleDateString(visitor.locale, {
     timeZone: visitor.timeZone,
     weekday: "long",
@@ -58,6 +58,6 @@ export function formatTime(instant: Date, visitor: Visitor): string {
   return instant.toLocaleTimeString(visitor.locale, { timeZone: visitor.timeZone, timeStyle: "short" });
 }
 
-export function formatDate(instant: Date, visitor: Visitor): string {
+export function formatBookedDate(instant: Date, visitor: Visitor): string {
   return instant.toLocaleDateString(visitor.locale, { timeZone: visitor.timeZone, dateStyle: "full" });
 }

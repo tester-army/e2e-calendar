@@ -1,6 +1,8 @@
 import { test } from "@e2e-dev/web";
 import { expect } from "e2e";
 
+import { readVisitor } from "./fixtures";
+
 test("the offer card shows the call, the Date and Time fields, and a disabled Book button", async ({ app, screen }) => {
   await app.open("/");
 
@@ -14,6 +16,6 @@ test("the offer card shows the call, the Date and Time fields, and a disabled Bo
 test("the times are in the browser's time zone", async ({ app, screen, browser }) => {
   await app.open("/");
 
-  const timeZone = await browser.evaluate(() => Intl.DateTimeFormat().resolvedOptions().timeZone);
+  const { timeZone } = await readVisitor(browser);
   await expect(screen.getByTestId("time-zone")).toHaveText(timeZone);
 });

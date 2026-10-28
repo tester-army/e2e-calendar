@@ -7,8 +7,8 @@ import {
   TUESDAY,
   WEDNESDAY,
   at,
-  formatDate,
-  formatDay,
+  formatBookedDate,
+  formatPickedDay,
   formatTime,
   nextWeekday,
   pickableDaysThisMonth,
@@ -29,7 +29,7 @@ describe("booking", { tags: ["booking"], skip }, () => {
     await expect(screen.getByTestId("booking-status")).toHaveText("Booked");
     await expect(screen.getByTestId("booked-time")).toHaveAttribute("datetime", start.toISOString());
     await expect(screen.getByTestId("booked-time")).toHaveText(formatTime(start, visitor));
-    await expect(screen.getByTestId("booked-date")).toHaveText(formatDate(start, visitor));
+    await expect(screen.getByTestId("booked-date")).toHaveText(formatBookedDate(start, visitor));
     await expect(screen.getByTestId("time-zone")).toHaveText(visitor.timeZone);
   });
 
@@ -96,7 +96,7 @@ describe("booking", { tags: ["booking"], skip }, () => {
 
     const slotsResponse = browser.waitForResponse("**/api/slots?**", { timeout: 120_000 });
     await agent.act("pick next Tuesday as the date");
-    await expect(screen.getByRole("button", "Date")).toHaveText(formatDay(tuesday, visitor));
+    await expect(screen.getByRole("button", "Date")).toHaveText(formatPickedDay(tuesday, visitor));
     const response = await slotsResponse;
 
     const query = new URL(response.url).searchParams;
