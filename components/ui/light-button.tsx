@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import type { ComponentProps } from "react";
 
-export const LIGHT_BUTTON = clsx(
+const LIGHT_BUTTON = clsx(
   "inline-flex h-10 w-full items-center justify-center gap-1.5 px-5 whitespace-nowrap",
   "bg-e2e-button-fill-solid type-button-s font-medium text-e2e-text-on-light",
   "transition-colors duration-200 motion-reduce:transition-none",

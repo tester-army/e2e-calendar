@@ -1,5 +1,4 @@
 import clsx from "clsx";
-import type { ComponentProps } from "react";
 
 export const OUTLINE_BUTTON = clsx(
   "inline-flex h-10 w-full items-center justify-center gap-1.5 px-5 whitespace-nowrap",
@@ -7,9 +6,4 @@ export const OUTLINE_BUTTON = clsx(
   "transition-[color,box-shadow] duration-200 motion-reduce:transition-none",
   "hover:text-e2e-text-bright hover:inset-ring-e2e-paper-0",
   "focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-e2e-white-60",
-  "disabled:pointer-events-none disabled:opacity-40",
 );
-
-export function OutlineButton({ className, type = "button", ...props }: ComponentProps<"button">) {
-  return <button type={type} className={clsx(OUTLINE_BUTTON, className)} {...props} />;
-}

@@ -20,7 +20,7 @@ function isDate(value: string): boolean {
 function isTimeZone(value: string): boolean {
   try {
     new Intl.DateTimeFormat("en-US", { timeZone: value });
-    return value !== "";
+    return true;
   } catch {
     return false;
   }

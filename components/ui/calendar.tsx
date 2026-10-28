@@ -93,4 +93,4 @@ function CalendarDayButton({ className, day, modifiers, ...props }: ComponentPro
   );
 }
 
-export { Calendar, CalendarDayButton };
+export { Calendar };

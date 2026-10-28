@@ -5,7 +5,7 @@ import { useSyncExternalStore, type ComponentProps } from "react";
 // The server can't know the visitor's zone or locale, so only the browser renders these.
 const subscribe = () => () => {};
 
-export function useVisitorTimeZone() {
+function useVisitorTimeZone() {
   return useSyncExternalStore(
     subscribe,
     () => Intl.DateTimeFormat().resolvedOptions().timeZone,
