@@ -1,4 +1,4 @@
-# e2e-booking
+# e2e-calendar
 
 A booking calendar for a 30-minute call, used as an example of end-to-end testing a date picker, a dropdown, and time zones with [e2e](https://www.npmjs.com/package/e2e). The same tests run as a visitor in London and as one in New York.
 
