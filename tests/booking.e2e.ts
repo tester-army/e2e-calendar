@@ -26,7 +26,7 @@ describe("booking", { tags: ["booking"], skip }, () => {
 
     // 14:30 UTC in London, 19:30 UTC in New York.
     const start = at(nextWeekday(TUESDAY, visitor.timeZone), "14:30");
-    await expect(screen.getByTestId("booking-status")).toHaveText("Booked");
+    await expect(screen.getByTestId("booking-status")).toHaveText("booked");
     await expect(screen.getByTestId("booked-time")).toHaveAttribute("datetime", start.toISOString());
     await expect(screen.getByTestId("booked-time")).toHaveText(formatTime(start, visitor));
     await expect(screen.getByTestId("booked-date")).toHaveText(formatBookedDate(start, visitor));
@@ -41,7 +41,7 @@ describe("booking", { tags: ["booking"], skip }, () => {
     await agent.act("book next Tuesday at 10:00 New York time");
 
     const start = at(nextWeekday(TUESDAY, visitor.timeZone), "10:00", HOST_TIME_ZONE);
-    await expect(screen.getByTestId("booking-status")).toHaveText("Booked");
+    await expect(screen.getByTestId("booking-status")).toHaveText("booked");
     await expect(screen.getByTestId("booked-time")).toHaveAttribute("datetime", start.toISOString());
     await expect(screen.getByTestId("booked-time")).toHaveText(formatTime(start, visitor));
     await expect(screen.getByTestId("host-time")).toHaveText("10:00 AM in New York, the host's time.");
@@ -53,7 +53,7 @@ describe("booking", { tags: ["booking"], skip }, () => {
     {
       timeout: 180_000,
       agentContext:
-        "The mouse is switched off in this test: clicks and taps do nothing. Press Enter on a control instead of clicking it: on the Date field to open the calendar, on Go to the Next Month to page it, on a day's button to pick it, on the Time field to open the list, on a time to pick it, and on Book.",
+        "The mouse is switched off in this test: clicks and taps do nothing. Press Enter on a control instead of clicking it: on the Date field to open the calendar, on go to the next month to page it, on a day's button to pick it, on the Time field to open the list, on a time to pick it, and on Book.",
     },
     async ({ app, agent, screen, browser }) => {
       await browser.addInitScript(switchOffTheMouse);
@@ -64,7 +64,7 @@ describe("booking", { tags: ["booking"], skip }, () => {
 
       // Nothing is taken on Wednesdays, so the earliest is 9:00 New York.
       const start = at(nextWeekday(WEDNESDAY, visitor.timeZone), "09:00", HOST_TIME_ZONE);
-      await expect(screen.getByTestId("booking-status")).toHaveText("Booked");
+      await expect(screen.getByTestId("booking-status")).toHaveText("booked");
       await expect(screen.getByTestId("booked-time")).toHaveAttribute("datetime", start.toISOString());
     },
   );
@@ -86,7 +86,7 @@ describe("booking", { tags: ["booking"], skip }, () => {
       schema: z.object({ days: z.array(z.number().int()) }),
     });
     expect(days).toEqual(pickableDaysThisMonth(timeZone));
-    await expect(screen.getByRole("button", "Go to the Previous Month")).toBeDisabled();
+    await expect(screen.getByRole("button", "go to the previous month")).toBeDisabled();
   });
 
   test("a taken slot isn't offered, on the page or by the API", async ({ app, agent, screen, browser }) => {
@@ -96,7 +96,7 @@ describe("booking", { tags: ["booking"], skip }, () => {
 
     const slotsResponse = browser.waitForResponse("**/api/slots?**", { timeout: 120_000 });
     await agent.act("pick next Tuesday as the date");
-    await expect(screen.getByRole("button", "Date")).toHaveText(formatPickedDay(tuesday, visitor));
+    await expect(screen.getByRole("button", "date")).toHaveText(formatPickedDay(tuesday, visitor));
     const response = await slotsResponse;
 
     const query = new URL(response.url).searchParams;
@@ -107,7 +107,7 @@ describe("booking", { tags: ["booking"], skip }, () => {
     expect(slots).not.toContain(at(tuesday, "11:00", HOST_TIME_ZONE).toISOString());
     expect(slots).toContain(at(tuesday, "11:30", HOST_TIME_ZONE).toISOString());
 
-    await screen.getByRole("combobox", "Time").tap();
+    await screen.getByRole("combobox", "time").tap();
     await expect(screen.getByRole("option")).toHaveText(slots.map((slot) => formatTime(new Date(slot), visitor)));
   });
 });

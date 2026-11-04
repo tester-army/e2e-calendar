@@ -1,10 +1,10 @@
 "use client";
 
 import { cn } from "cn";
-import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from "lucide-react";
 import { Select as SelectPrimitive } from "radix-ui";
 import type { ComponentProps } from "react";
 
+import { DottedIcon } from "@/components/ui/dotted-icon";
 import { FIELD } from "@/components/ui/field";
 
 // shadcn/ui's Select, cut down to what the booking card uses.
@@ -24,8 +24,8 @@ function SelectTrigger({ className, children, ...props }: ComponentProps<typeof 
       {...props}
     >
       {children}
-      <SelectPrimitive.Icon asChild>
-        <ChevronDownIcon className="size-4 text-e2e-text-faint" />
+      <SelectPrimitive.Icon className="e2e-field-caret">
+        <DottedIcon name="chevron-down" />
       </SelectPrimitive.Icon>
     </SelectPrimitive.Trigger>
   );
@@ -43,7 +43,7 @@ function SelectContent({
       <SelectPrimitive.Content
         data-slot="select-content"
         className={cn(
-          "relative z-50 max-h-(--radix-select-content-available-height) min-w-[8rem] origin-(--radix-select-content-transform-origin) overflow-x-hidden overflow-y-auto border border-e2e-hairline-strong bg-e2e-panel text-e2e-text-primary shadow-[0_16px_40px_rgb(0_0_0/0.6)]",
+          "relative z-50 max-h-(--radix-select-content-available-height) min-w-[8rem] origin-(--radix-select-content-transform-origin) overflow-x-hidden overflow-y-auto border border-e2e-neutral-700 bg-e2e-neutral-800 text-e2e-off-white",
           position === "popper" && "data-[side=bottom]:translate-y-1 data-[side=top]:-translate-y-1",
           className,
         )}
@@ -54,9 +54,9 @@ function SelectContent({
         <SelectScrollUpButton />
         <SelectPrimitive.Viewport
           className={cn(
-            "p-1",
+            "p-e2e-half",
             position === "popper" &&
-              "h-(--radix-select-trigger-height) w-full min-w-(--radix-select-trigger-width) scroll-my-1",
+              "h-(--radix-select-trigger-height) w-full min-w-(--radix-select-trigger-width) scroll-my-e2e-half",
           )}
         >
           {children}
@@ -72,15 +72,19 @@ function SelectItem({ className, children, ...props }: ComponentProps<typeof Sel
     <SelectPrimitive.Item
       data-slot="select-item"
       className={cn(
-        "relative flex w-full cursor-default items-center py-2 pr-8 pl-3 type-field text-e2e-text-soft outline-hidden select-none",
-        "focus:bg-e2e-white-7 focus:text-e2e-text-bright data-[disabled]:pointer-events-none data-[disabled]:opacity-40",
+        "relative flex w-full cursor-pointer items-center py-e2e-1 pr-e2e-5 pl-e2e-2 type-body-m text-e2e-neutral-300 outline-hidden select-none",
+        "data-[highlighted]:bg-e2e-neutral-700 data-[highlighted]:text-e2e-off-white data-[state=checked]:text-e2e-off-white",
+        "data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
         className,
       )}
       {...props}
     >
-      <span data-slot="select-item-indicator" className="absolute right-3 flex size-3.5 items-center justify-center">
+      <span
+        data-slot="select-item-indicator"
+        className="absolute right-e2e-2 flex items-center justify-center text-e2e-green"
+      >
         <SelectPrimitive.ItemIndicator>
-          <CheckIcon className="size-4" />
+          <DottedIcon name="check" />
         </SelectPrimitive.ItemIndicator>
       </span>
       <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
@@ -92,10 +96,10 @@ function SelectScrollUpButton({ className, ...props }: ComponentProps<typeof Sel
   return (
     <SelectPrimitive.ScrollUpButton
       data-slot="select-scroll-up-button"
-      className={cn("flex cursor-default items-center justify-center py-1 text-e2e-text-faint", className)}
+      className={cn("flex cursor-default items-center justify-center py-e2e-1 text-e2e-neutral-400", className)}
       {...props}
     >
-      <ChevronUpIcon className="size-4" />
+      <DottedIcon name="chevron-up" />
     </SelectPrimitive.ScrollUpButton>
   );
 }
@@ -104,10 +108,10 @@ function SelectScrollDownButton({ className, ...props }: ComponentProps<typeof S
   return (
     <SelectPrimitive.ScrollDownButton
       data-slot="select-scroll-down-button"
-      className={cn("flex cursor-default items-center justify-center py-1 text-e2e-text-faint", className)}
+      className={cn("flex cursor-default items-center justify-center py-e2e-1 text-e2e-neutral-400", className)}
       {...props}
     >
-      <ChevronDownIcon className="size-4" />
+      <DottedIcon name="chevron-down" />
     </SelectPrimitive.ScrollDownButton>
   );
 }

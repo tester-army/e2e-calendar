@@ -1,13 +1,13 @@
 "use client";
 
 import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
 import { useRef, useState } from "react";
 
 import { VisitorTimeZone } from "@/components/local-time";
+import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
+import { DottedIcon } from "@/components/ui/dotted-icon";
 import { FIELD, Field } from "@/components/ui/field";
-import { LightButton } from "@/components/ui/light-button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
@@ -49,35 +49,37 @@ export function BookingCard() {
 
   const options = Array.isArray(slots) ? slots : [];
   const placeholder = !day
-    ? "Pick a day first"
+    ? "pick a day first"
     : slots === "loading"
-      ? "Loading times…"
+      ? "loading times…"
       : slots === "failed"
-        ? "Couldn't load the times"
+        ? "couldn't load the times"
         : options.length === 0
-          ? "No free times"
-          : "Pick a time";
+          ? "no free times"
+          : "pick a time";
 
   return (
     <section
       aria-labelledby="offer-heading"
-      className="flex flex-col gap-6 border border-e2e-hairline-strong bg-e2e-panel p-5"
+      className="flex flex-col gap-e2e-3 border border-e2e-neutral-800 bg-e2e-neutral-800/40 p-e2e-3"
     >
-      <div className="flex flex-col gap-1">
-        <h2 id="offer-heading" className="type-h3-display text-e2e-text-bright">
-          Intro call
+      <div className="flex flex-col gap-e2e-1">
+        <h2 id="offer-heading" className="type-h3 text-e2e-off-white">
+          intro call
         </h2>
-        <p className="type-body-s text-e2e-text-secondary">30 min · with the e2e team in New York</p>
+        <p className="type-body-m text-e2e-neutral-400">30 min · with the e2e team in New York</p>
       </div>
 
-      <form action="/booked" className="flex flex-col gap-4">
-        <Field label="Date" htmlFor="day">
+      <form action="/booked" className="flex flex-col gap-e2e-2">
+        <Field label="date" htmlFor="day">
           <Popover open={pickingDay} onOpenChange={setPickingDay}>
             <PopoverTrigger id="day" className={FIELD}>
-              <span className={day ? undefined : "text-e2e-text-faint"}>
-                {day ? day.toLocaleDateString(undefined, dayFormat) : "Pick a day"}
+              <span className={day ? undefined : "text-e2e-neutral-500"}>
+                {day ? day.toLocaleDateString(undefined, dayFormat) : "pick a day"}
               </span>
-              <CalendarIcon className="size-4 text-e2e-text-faint" />
+              <span className="e2e-field-caret">
+                <DottedIcon name="chevron-down" />
+              </span>
             </PopoverTrigger>
             <PopoverContent align="start" className="w-auto p-0">
               <DayCalendar selected={day} onSelect={pickDay} />
@@ -85,7 +87,7 @@ export function BookingCard() {
           </Popover>
         </Field>
 
-        <Field label="Time" htmlFor="time">
+        <Field label="time" htmlFor="time">
           <Select name="start" required value={start} onValueChange={setStart} disabled={options.length === 0}>
             <SelectTrigger id="time">
               <SelectValue placeholder={placeholder} />
@@ -100,13 +102,13 @@ export function BookingCard() {
           </Select>
         </Field>
 
-        <p className="type-caption text-e2e-text-faint">
-          Times in <VisitorTimeZone data-testid="time-zone" />
+        <p className="type-body-s text-e2e-neutral-500">
+          times in <VisitorTimeZone data-testid="time-zone" />
         </p>
 
-        <LightButton type="submit" disabled={!start}>
-          Book
-        </LightButton>
+        <Button type="submit" disabled={!start} className="mt-e2e-1 w-full">
+          book
+        </Button>
       </form>
     </section>
   );
