@@ -7,7 +7,7 @@ import { DayPicker, getDefaultClassNames, type DayButton } from "react-day-picke
 import { DottedIcon } from "@/components/ui/dotted-icon";
 
 const CELL = cn(
-  "inline-flex cursor-pointer items-center justify-center outline-none select-none",
+  "inline-flex cursor-pointer items-center justify-center select-none",
   "focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-e2e-green",
   "disabled:pointer-events-none disabled:opacity-30",
 );
